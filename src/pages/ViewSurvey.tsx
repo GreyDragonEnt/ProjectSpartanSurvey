@@ -17,6 +17,7 @@ const ViewSurvey: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isCustomizing, setIsCustomizing] = useState(false);
+  const [isDeploying, setIsDeploying] = useState(false);
   const [theme, setTheme] = useState({
     backgroundColor: '#F4F5F7',
     questionColor: '#FFFFFF',
@@ -61,8 +62,17 @@ const ViewSurvey: React.FC = () => {
     }
   };
 
-  const handleDeploy = () => {
+  const handleDeploy = async () => {
     if (!survey) return;
+    
+    setIsDeploying(true);
+    try {
+      showToast('Starting deployment...', 'info');
+    } catch (error) {
+      showToast('Failed to deploy survey', 'error');
+    } finally {
+      setIsDeploying(false);
+    }
   };
 
   if (!survey) {
@@ -122,10 +132,11 @@ const ViewSurvey: React.FC = () => {
               </Button>
               <Button
                 onClick={handleDeploy}
+                disabled={isDeploying}
                 className="bg-[#23C4A2] hover:bg-[#23C4A2]/90 text-white"
               >
                 <Globe className="h-5 w-5 mr-2" />
-                Deploy
+                {isDeploying ? 'Deploying...' : 'Deploy'}
               </Button>
             </>
           )}
