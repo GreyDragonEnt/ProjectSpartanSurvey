@@ -15,7 +15,7 @@ interface TeamModalProps {
 const TeamModal: React.FC<TeamModalProps> = ({
   isOpen,
   onClose,
-  members,
+  members = [], // Provide default empty array
   onUpdateMembers
 }) => {
   const { showToast } = useToast();
@@ -33,7 +33,7 @@ const TeamModal: React.FC<TeamModalProps> = ({
       return;
     }
 
-    if (members.some(member => member.email === newMemberEmail)) {
+    if (members?.some(member => member.email === newMemberEmail)) {
       showToast('This user is already a team member', 'error');
       return;
     }
@@ -45,19 +45,19 @@ const TeamModal: React.FC<TeamModalProps> = ({
       joinedAt: new Date()
     };
 
-    onUpdateMembers([...members, newMember]);
+    onUpdateMembers([...(members || []), newMember]);
     setNewMemberEmail('');
     showToast('Invitation sent successfully', 'success');
   };
 
   const handleRemoveMember = (email: string) => {
-    onUpdateMembers(members.filter(member => member.email !== email));
+    onUpdateMembers((members || []).filter(member => member.email !== email));
     showToast('Team member removed', 'success');
   };
 
   const handleRoleChange = (email: string, role: TeamMember['role']) => {
     onUpdateMembers(
-      members.map(member =>
+      (members || []).map(member =>
         member.email === email ? { ...member, role } : member
       )
     );
@@ -134,10 +134,10 @@ const TeamModal: React.FC<TeamModalProps> = ({
           {/* Team members list */}
           <div className="space-y-4">
             <h3 className="text-sm font-medium text-gray-900">
-              Current Team Members ({members.length})
+              Current Team Members ({members?.length || 0})
             </h3>
             <div className="divide-y divide-gray-200">
-              {members.map((member) => (
+              {members?.map((member) => (
                 <div
                   key={member.email}
                   className="py-3 flex items-center justify-between"

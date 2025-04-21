@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSurvey } from '../context/SurveyContext';
-import { ArrowLeft, Share2, Palette } from 'lucide-react';
-import { Question } from '../context/SurveyContext';
+import { ArrowLeft, Share2, Palette, Globe } from 'lucide-react';
 import SurveyPreview from '../components/survey/SurveyPreview';
 import Button from '../components/ui/Button';
 import useToast from '../hooks/useToast';
@@ -62,6 +61,10 @@ const ViewSurvey: React.FC = () => {
     }
   };
 
+  const handleDeploy = () => {
+    if (!survey) return;
+  };
+
   if (!survey) {
     return <div className="container mx-auto px-4 py-8">Loading...</div>;
   }
@@ -109,13 +112,22 @@ const ViewSurvey: React.FC = () => {
           </Button>
           
           {survey.isPublished && (
-            <Button
-              onClick={() => setIsShareModalOpen(true)}
-              className="bg-[#5D5FEF] hover:bg-[#5D5FEF]/90 text-white"
-            >
-              <Share2 className="h-5 w-5 mr-2" />
-              Share Survey
-            </Button>
+            <>
+              <Button
+                onClick={() => setIsShareModalOpen(true)}
+                className="bg-[#5D5FEF] hover:bg-[#5D5FEF]/90 text-white"
+              >
+                <Share2 className="h-5 w-5 mr-2" />
+                Share Survey
+              </Button>
+              <Button
+                onClick={handleDeploy}
+                className="bg-[#23C4A2] hover:bg-[#23C4A2]/90 text-white"
+              >
+                <Globe className="h-5 w-5 mr-2" />
+                Deploy
+              </Button>
+            </>
           )}
         </div>
       </div>
