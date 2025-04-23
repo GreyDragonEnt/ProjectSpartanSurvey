@@ -1,2 +1,0 @@
-# ProjectSpartanSurvey
-Survey Tool
